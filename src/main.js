@@ -3,15 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import "weui";
+
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
 import Vuelidate from "vuelidate"
 
-import auth2 from "./lib/auth2"
+Vue.use(ElementUI);
 
 Vue.use(Vuelidate);
 
 Vue.config.productionTip = false
-
 
 
 window.onerror = function () {
@@ -19,7 +20,7 @@ window.onerror = function () {
   return false;
 }
 
-auth2(init);
+init();
 
 function init() {
   /* eslint-disable no-new */

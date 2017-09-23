@@ -69,13 +69,5 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackIncludeAssetsPlugin({
-      assets: [
-        "static/lib/swiper/swiper-3.4.2.min.js",
-        "static/lib/swiper/swiper-3.4.2.min.css"
-      ],
-      append: false,
-      publicPath: publicPath
-    })
   ]
 }

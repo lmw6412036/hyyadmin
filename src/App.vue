@@ -1,10 +1,50 @@
 <template>
-
   <div id="app">
+    <el-row>
+      <el-col :span="4">
+        <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-message"></i>
+              <span slot="title">导航一</span>
+            </template>
+            <el-menu-item-group>
+              <span slot="title">分组一</span>
+              <el-menu-item index="1-1">选项1</el-menu-item>
+              <el-menu-item index="1-2">选项2</el-menu-item>
+            </el-menu-item-group>
+            <el-menu-item-group title="分组2">
+              <el-menu-item index="1-3">选项3</el-menu-item>
+            </el-menu-item-group>
+            <el-submenu index="1-4">
+              <span slot="title">选项4</span>
+              <el-menu-item index="1-4-1">选项1</el-menu-item>
+            </el-submenu>
+          </el-submenu>
+          <el-menu-item index="2">
+            <i class="el-icon-menu"></i>
+            <span slot="title">导航二</span>
+          </el-menu-item>
+          <el-menu-item index="3">
+            <i class="el-icon-setting"></i>
+            <span slot="title">导航三</span>
+          </el-menu-item>
+        </el-menu>
 
-    <transition :name="page">
-      <router-view></router-view>
-    </transition>
+      </el-col>
+      <el-col :span="20">
+        <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+          <el-menu-item index="1">处理中心</el-menu-item>
+          <el-submenu index="2">
+            <template slot="title">我的工作台</template>
+            <el-menu-item index="2-1">选项1</el-menu-item>
+            <el-menu-item index="2-2">选项2</el-menu-item>
+            <el-menu-item index="2-3">选项3</el-menu-item>
+          </el-submenu>
+          <el-menu-item index="3"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+        </el-menu>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -21,89 +61,22 @@
     },
 
     created() {
-//      http("smarthos.system.area.list", {}).then((res) => {
-//        console.log("111", res);
-//      });
     },
 
 
-    watch: {
-      $route(to, from) {
-        let p = to.fullPath;
-        if (p === from.fullPath || new Date().getTime() - window.appStartTime < 200) {
-          historyCache.clear();
-          historyCache.set([p]);
-          return;
-        }
-        let history = historyCache.get();
-        let index = historyCache.inHistory(p);
-        if (index > -1) {
-          this.page = "right";
-          history.splice(index + 1);
-        } else {
-          this.page = "left";
-          history.push(p);
-        }
-        historyCache.set(history);
-      }
-    }
+    watch: {}
   }
 </script>
 
 <style lang="scss">
   @import "./common/common.scss";
 
-  .left-enter-active, .left-leave-active {
-    position: fixed;
-    @include t_r_b_l();
-    transition: all 0.3s;
-  }
-
-  .left-enter {
-    position: fixed;
-    @include t_r_b_l();
-    transform: translate(100%, 0);
-  }
-
-  .left-leave-to {
-    transform: translate(-100%, 0);
-  }
-
-  .right-enter-active, .right-leave-active {
-    position: fixed;
-    @include t_r_b_l();
-    transition: all 0.3s;
-  }
-
-  .right-enter {
-    transform: translate(-100%, 0);
-  }
-
-  .right-leave-to {
-    transform: translate(100%, 0);
-  }
-
-  #app, .page {
+  #app {
     position: fixed;
     /*display: flex;*/
     /*flex-direction: column;*/
     background: #f5f5f5;
     overflow: hidden;
     @include t_r_b_l();
-  }
-
-  .page {
-    background-color: $bgColor;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    .wrapper {
-      overflow-y: auto;
-      overflow-scrolling: touch;
-      flex: 1 1 auto;
-    }
-    .noflex {
-      flex: 0 0 auto;
-    }
   }
 </style>
