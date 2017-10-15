@@ -69,5 +69,14 @@ module.exports = {
     ]
   },
   plugins: [
+    new HtmlWebpackIncludeAssetsPlugin({
+      assets: [
+        "static/lib/md5-min.js",
+        "static/lib/sha512.min.js",
+        "static/lib/url.min.js"
+      ],
+      append: false,
+      publicPath: publicPath
+    })
   ]
 }

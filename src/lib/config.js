@@ -1,6 +1,6 @@
 export default {
-    key_prefix: "fyyy_pat_",
-    api_url: "//test-api-ywfy.hztywl.cn/app",
+    key_prefix: "hyyadmin_",
+    api_url: "//127.0.0.1:8360/api",
     base_params: {
         channel: "23",
         format: "JSON",

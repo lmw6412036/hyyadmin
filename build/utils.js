@@ -22,6 +22,14 @@ exports.cssLoaders = function (options) {
         }
     }
 
+    var px2remLoader = {
+        loader: 'lmw-px2rem-loader',
+        options: {
+            remUnit: 100,
+            exclude: "/*no px2rem file*/"
+        }
+    }
+
     // generate loader string to be used with extract text plugin
     function generateLoaders(loader, loaderOptions) {
         var loaders = [cssLoader]

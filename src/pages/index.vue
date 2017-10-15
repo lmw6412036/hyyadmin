@@ -1,299 +1,133 @@
 <template>
-
-  <div class="page index">
-    <div class="wrapper" ref="main">
-      <div class="banner swiper-container" ref="swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="ad in adsettings">
-            <img :src="ad.adUrl" alt="">
-          </div>
-        </div>
-        <div class="swiper-pagination"></div>
-        <div class="search">
-          <i></i><span>搜索医生</span>
-        </div>
-        <div class="message">
-          <span>0</span>
-        </div>
-      </div>
-      <div class="fastnav">
-        <ul>
-          <li :class="[item.name]" v-for="item in fastNav">
-            <div class="name">{{item.value}}</div>
-            <div class="text">{{item.text}}</div>
-            <div class="btn">
-              <span>{{item.btn}}</span>
+    <el-container>
+        <el-header class="header flex">
+            <div class="logo flex0">
+                <span>后台管理系统</span>
             </div>
-          </li>
-        </ul>
-      </div>
-      <div class="indexnav">
-        <ul>
-          <li @click="goPage(item)" v-for="item in nav" :class="[item.name]">
-            <div class="icon"></div>
-            <div class="text">{{item.value}}</div>
-          </li>
-        </ul>
-      </div>
-      <div class="notice">
-        <ul>
-          <li v-for="i in 3">
-            <div class="icon">
-              <i></i>
+            <div class="top flex flex1">
+                <div class="collapse flex0" @click="handleCollapse">
+                    <i :class="[isCollapse?'el-icon-d-arrow-right':'el-icon-d-arrow-left']"></i>
+                </div>
             </div>
-            <div class="info">
-              <div class="title">预约挂号</div>
-              <div class="time">10:09</div>
-              <div class="content">
-                您在浙二医院预约挂号成功
-              </div>
-              <div class="sub">浙二医院</div>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-    <app-footer class="noflex" ref="footer"></app-footer>
-    <loading ref="loading"></loading>
-  </div>
+        </el-header>
+        <el-container :style="mainStyle">
+            <el-aside class="aside" :style="asideStyle">
+                <el-menu
+                        :collapse="isCollapse"
+                        background-color="#545c64"
+                        text-color="#fff"
+                        class="el-menu-vertical-demo">
+                    <el-submenu index="1">
+                        <template slot="title">
+                            <i class="el-icon-message"></i>
+                            <span slot="title">导航一</span>
+                        </template>
+                        <el-menu-item-group>
+                            <span slot="title">分组一</span>
+                            <el-menu-item index="1-1">选项1</el-menu-item>
+                            <el-menu-item index="1-2">选项2</el-menu-item>
+                        </el-menu-item-group>
+                        <el-menu-item-group title="分组2">
+                            <el-menu-item index="1-3">选项3</el-menu-item>
+                        </el-menu-item-group>
+                        <el-submenu index="1-4">
+                            <span slot="title">选项4</span>
+                            <el-menu-item index="1-4-1">选项1</el-menu-item>
+                        </el-submenu>
+                    </el-submenu>
+                    <el-menu-item index="2">
+                        <i class="el-icon-menu"></i>
+                        <span slot="title">导航二</span>
+                    </el-menu-item>
+                    <el-menu-item index="3">
+                        <i class="el-icon-setting"></i>
+                        <span slot="title">导航三</span>
+                    </el-menu-item>
+                </el-menu>
+            </el-aside>
+            <el-main>Main</el-main>
+        </el-container>
+    </el-container>
 </template>
 
-<script type="text/ecmascript-6">
-  import config from "../lib/config"
-  import http from "../lib/http"
-  import Loading from "../base/loading.vue";
-  import AppFooter from "../components/app-footer.vue"
+<script>
+    import http from "../lib/http"
+    import {debug} from "../lib/util"
 
-  import {mainHeightMixin} from "../lib/mixin"
-
-
-  export default {
-    mixins: [mainHeightMixin],
-    data() {
-      return {
-        adsettings: [],
-        fastNav: config.index_fast_nav,
-        nav: config.index_nav
-      };
-    },
-    computed: {},
-    components: {
-      Loading,
-      AppFooter
-    },
-    created() {
-      this.swiper = null;
-    },
-    mounted() {
-      this._init();
-    },
-    beforeDestroy() {
-
-    },
-    watch: {},
-    methods: {
-      _init() {
-        this.$refs.loading.show();
-
-        http("smarthos.user.pat.index", {})
-          .then((res) => {
-            this.$refs.loading.hide();
-            console.log(res);
-            if (res.code == 0) {
-              let obj = res.obj;
-              this.adsettings = obj.adsettings;
-              this._swiper();
-            }
-          });
-      },
-      _swiper() {
-        setTimeout((res) => {
-          this.swiper = new Swiper(this.$refs.swiper, {
-            loop: true,
-            autoplay: 5000,
-            pagination: '.swiper-pagination',
-          });
-        }, 20)
-      },
-      goPage(item) {
-        item.path && this.$router.push(item.path);
-      }
-    }
-  };
-</script>
-
-<style lang="scss">
-  @import "../common/common.scss";
-
-  .index {
-    $wrapperPadding: 12px;
-    .wrapper {
-      .message {
-        position: absolute;
-        right: $commonSpace;
-        top: 52px;
-        width: 66px;
-        height: 66px;
-        background-image: url(../../static/img/index/icon-message.png);
-        background-size: 45px;
-        background-position: right center;
-        background-repeat: no-repeat;
-        z-index: 100;
-        span {
-          @extend .message-tip;
-        }
-      }
-      .search {
-        position: absolute;
-        top: 52px;
-        width: 560px;
-        left: 50%;
-        margin-left: -280px;
-        z-index: 100;
-        @include h_lh(66px);
-        background-color: rgba(255, 255, 255, .4);
-        border-radius: 33px;
-        text-align: center;
-        color: white;
-        i {
-          width: 25px;
-          height: 25px;
-          margin-right: 5px;
-          background-image: url(../../static/img/index/search.png);
-          background-size: 100% 100%;
-        }
-        i, span {
-          display: inline-block;
-        }
-      }
-      .fastnav {
-        ul {
-          display: flex;
-          li {
-            height: 180px;
-            background-size: 100% 100%;
-            flex: 0 0 auto;
-            padding-top: 20px;
-            padding-left: $commonSpace;
-            width: 50%;
-            .name {
-              font-size: 16px; /*no*/
-            }
-            .text {
-              margin-top: 10px;
-            }
-            .btn {
-              margin-top: 14px;
-              span {
-                color: #fb791f;
-                border: 1px #fb791f solid; /*no*/
-                border-radius: 5px;
-                padding: 6px;
-              }
-            }
-            @each $i in fast-consult, ask-doc {
-              &.#{$i} {
-                background-image: url("../../static/img/index/#{$i}.png");
-              }
-            }
-          }
-        }
-      }
-      .indexnav {
-        margin-top: $wrapperPadding;
-        ul {
-          background-color: white;
-          overflow: hidden;
-          li {
-            text-align: center;
-            float: left;
-            width: 25%;
-            padding-top: 25px;
-            padding-bottom: 25px;
-            @each $i in guide, book, queuing, payment, report, steward, help, more {
-              &.#{$i} {
-                .icon {
-                  background-image: url("../../static/img/index/#{$i}.png");
+    export default {
+        mixins: [],
+        data() {
+            return {
+                isCollapse: false,
+                mainStyle: {},
+            };
+        },
+        computed: {
+            asideStyle() {
+                if (this.isCollapse) {
+                    return {
+                        width: "64px"
+                    }
                 }
-              }
             }
-            .icon {
-              background-size: 100% 100%;
-              width: 80px;
-              height: 80px;
-              margin: 0 auto;
+        },
+        components: {},
+        created() {
+            this.init();
+            this.demo();
+        },
+        mounted() {
+        },
+        beforeDestroy() {
+        },
+        watch: {},
+        methods: {
+            init() {
+                this.mainStyle.height = `${window.innerHeight - 60}px`
+            },
+            demo() {
+                http("/index/index", {}).then((res) => {
+                    debug("demo", res);
+                })
+            },
+            handleCollapse() {
+                this.isCollapse = !this.isCollapse;
             }
-          }
         }
-      }
-      .notice {
-        ul {
-          padding-top: $wrapperPadding;
-          li + li {
-            margin-top: $wrapperPadding;
-          }
-          li {
-            padding: 30px $commonSpace;
-            display: flex;
-            background-color: white;
-            .icon {
-              $iconWid: 60px;
-              flex: 0 0 auto;
-              width: $iconWid;
-              i {
-                display: inline-block;
-                width: $iconWid;
-                height: $iconWid;
-                background-image: url(../../static/img/index/icon-book.png);
-                background-size: 100% 100%;
-              }
-            }
-            .info {
-              max-width: 610px;
-              margin-left: 20px;
-              .time, .title {
-                color: #999999;
-                font-size: 12px; /*no*/
-              }
-            }
-            .content {
-              padding-top: 30px;
-              font-size: 16px; /*no*/
-              color: #666;
-            }
-            .sub {
-              padding-top: 20px;
-              color: #999999;
-            }
-          }
-        }
-      }
-      .banner {
-        $bannerHei: 350px;
-        height: $bannerHei;
-        overflow: hidden;
-        .swiper-slide {
-          height: $bannerHei;
-          > img {
-            width: 100%;
-            height: $bannerHei;
-          }
-        }
-        .swiper-pagination {
-          text-align: right;
-          span {
-            background-color: white;
-            opacity: 0.8;
-            &.swiper-pagination-bullet-active {
-              background-color: $mainColor;
-            }
-          }
-        }
-      }
+    };
+</script>
+<style lang="scss">
+    @import "../common/common.scss";
+
+    .header, .aside {
+        background-color: #545c64;
     }
 
-  }
+    .aside {
+        transition: all .5s;
+    }
 
+    .el-menu {
+        border-right: 0px none;
+    }
 
+    .logo {
+        width: 300px;
+        span {
+            line-height: 60px;
+            color: white;
+            font-size: 20px;
+        }
+    }
+
+    .collapse {
+        cursor: pointer;
+        line-height: 60px;
+        font-size: 16px;
+        color: white;
+    }
+
+    .aside {
+
+    }
 </style>

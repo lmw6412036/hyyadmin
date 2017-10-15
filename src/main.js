@@ -3,30 +3,30 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from "./store/index"
 
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
-import Vuelidate from "vuelidate"
+import 'element-ui/lib/theme-chalk/index.css'
 
-Vue.use(ElementUI);
-
-Vue.use(Vuelidate);
+Vue.use(ElementUI)
 
 Vue.config.productionTip = false
-
 
 window.onerror = function () {
   console.log("error", arguments);
   return false;
 }
 
+//oauth2(init);
 init();
+
 
 function init() {
   /* eslint-disable no-new */
   new Vue({
     el: '#app',
     router,
+    store,
     template: '<App/>',
     components: {App}
   })

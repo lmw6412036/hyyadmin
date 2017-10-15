@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import {tokenCache, fromCache} from "../lib/cache"
 
-
 Vue.use(Router)
 
 const router = new Router({
@@ -10,7 +9,7 @@ const router = new Router({
         {
             path: '/',
             component: () => import("../pages/index.vue")
-        }
+        },
     ]
 
 });
